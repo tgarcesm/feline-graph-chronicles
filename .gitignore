@@ -1,0 +1,20 @@
+# Maven
+target/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Java
+*.class
+hs_err_pid*.log
+
+# Claude Code (configuracion local de la herramienta, no es parte del proyecto)
+.claude/
