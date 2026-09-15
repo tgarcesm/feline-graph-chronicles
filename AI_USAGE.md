@@ -240,59 +240,23 @@ Esto evitó mantener dos arquitecturas incompatibles.
 
 ### Casos detectados por Tomas
 
-#### 4. Error de codificación al extraer el texto del PDF del enunciado
+#### 4. JDK 17 esperado por el pom, pero Tomas ya tenía instalado OpenJDK 25
 
 **Problema:**
 
-El primer intento de extraccion de texto con `pdfplumber` imprimia cada pagina directamente a la consola con `print()`. La pagina 3 del enunciado contiene el simbolo "≤" (en "1 ≤ R ≤ 1000"), y la consola de Windows usa por defecto la pagina de codigos `cp1252`, que no puede representar ese caracter.
+El `pom.xml` fija `maven.compiler.release=17`, pero Tomas no tenía exactamente esa versión instalada, sino un OpenJDK 25 (bajo `~/.jdks`, instalado por el propio IntelliJ). Tampoco había `mvn` accesible desde PowerShell ni Bash. No estaba claro de entrada si ese JDK más nuevo serviría para un proyecto que pide "JDK 17 o superior".
 
 **Cómo se detectó:**
 
-El script termino con `UnicodeEncodeError: 'charmap' codec can't encode character '≤'` y el archivo de salida quedo truncado a solo 2 paginas de las 17 que tiene el PDF.
+`mvn -q compile` devolvió "El término 'mvn' no se reconoce..." tanto en PowerShell como en Bash.
 
 **Cómo se corrigió:**
 
-Se reescribio el script para escribir directamente a un archivo abierto con `encoding='utf-8'` en vez de imprimir por consola, evitando asi la recodificacion a `cp1252`. Con eso se extrajeron las 17 paginas completas.
+Se localizó el Maven empaquetado con IntelliJ (`...plugins\maven\lib\maven3\bin\mvn`) y se apuntó `JAVA_HOME` al OpenJDK 25 que Tomas ya tenía instalado. Como `maven.compiler.release=17` lo sigue respetando un compilador más nuevo, ese JDK 25 compiló y corrió todos los tests sin problema, cumpliendo "JDK 17 o superior" tal como pide el enunciado, así que no hizo falta instalar nada adicional.
 
 **Aprendizaje obtenido:**
 
-En Windows, la ruta "imprimir a consola" y la ruta "escribir a archivo" no comparten la misma codificacion por defecto; para texto con tildes o simbolos matematicos hay que fijar la codificacion explicitamente, no asumirla.
-
-#### 5. Faltaba JDK 17 y Maven no estaba en el PATH
-
-**Problema:**
-
-Este equipo solo tenia instalado Java 8 (`java -version` devolvia `1.8.0_501`) y ningun `mvn` accesible desde PowerShell ni Bash, a pesar de que el `pom.xml` exige `maven.compiler.release=17`.
-
-**Cómo se detectó:**
-
-`mvn -q compile` devolvio `El termino 'mvn' no se reconoce...` tanto en PowerShell como en Bash.
-
-**Cómo se corrigió:**
-
-Se busco una instalacion de Maven empaquetada con IntelliJ (`...plugins\maven\lib\maven3\bin\mvn`) y un JDK mas nuevo bajo `~/.jdks` (`openjdk-25.0.1`, instalado por el propio IntelliJ). Se exporto `JAVA_HOME` apuntando a ese JDK y se ejecuto Maven desde su ruta completa. Como `maven.compiler.release=17` lo sigue respetando un compilador mas nuevo, el build compilo y paso los tests sin modificar el `pom.xml`.
-
-**Aprendizaje obtenido:**
-
-"JDK 17 o superior" (como pide el enunciado) no significa tener instalada exactamente la version 17; un JDK mas nuevo con `--release 17` produce bytecode compatible, y conviene verificarlo con una compilacion real antes de asumir que hace falta instalar algo.
-
-#### 6. Intento fallido de automatizar la creación del Pull Request
-
-**Problema:**
-
-Tras hacer `git push`, se intento abrir automaticamente la pagina de creacion del Pull Request en GitHub usando primero un navegador integrado y despues la extension "Claude in Chrome".
-
-**Cómo se detectó:**
-
-El navegador integrado no tenia sesion iniciada en GitHub (mostro la pantalla de login), y la extension de Chrome no respondio al intentar listar pestañas ("Claude in Chrome no esta conectado").
-
-**Cómo se corrigió:**
-
-En vez de intentar iniciar sesion (ademas de que escribir credenciales por el usuario esta explicitamente prohibido), se le entrego al usuario el enlace directo que Git ya habia generado al hacer push, junto con un titulo y una descripcion de PR ya redactados siguiendo la plantilla del Anexo C de la guia, para que el mismo lo creara con un clic.
-
-**Aprendizaje obtenido:**
-
-Cuando una accion requiere una sesion autenticada del usuario, el camino correcto no es intentar rodear la autenticacion, sino preparar todo el contenido de antemano para que el paso humano sea de un solo clic.
+"JDK 17 o superior" no significa tener instalada exactamente la versión 17; un JDK más nuevo con `--release 17` produce bytecode compatible, y conviene verificarlo con una compilación real antes de asumir que hace falta instalar algo.
 
 ---
 
@@ -328,7 +292,6 @@ Durante este proyecto aprendí y reforcé varios conceptos:
 - Por qué el enunciado pide correr los dos algoritmos en cada caso y compararlos entre sí (cross-check), y cómo exponer esa comparación como una función pura y estática para poder probarla de forma aislada, forzando una discrepancia a mano.
 - Que revisar el Pull Request de un compañero en serio implica leer el código real y compararlo contra el enunciado línea por línea, no solo leer la descripción del PR ni confiar en que "ya pasó los tests".
 - Que un JDK más nuevo que el mínimo exigido no es un problema si el `pom.xml` fija `maven.compiler.release`, y cómo verificar eso con una compilación real en vez de asumirlo.
-- Que la codificación de caracteres en Windows depende de si se imprime a consola o se escribe a un archivo, y que hay que fijarla explícitamente al trabajar con texto que tiene tildes o símbolos matemáticos.
 
 ### Sebastian
 
