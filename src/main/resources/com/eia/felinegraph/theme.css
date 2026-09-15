@@ -1,0 +1,440 @@
+/*
+ * Tema felino de The Feline Graph Chronicles.
+ * Fondo oscuro de "laboratorio en sombras", tarjetas redondeadas y un color de acento por mision.
+ * -accent es un color propio: MainView lo cambia segun la mision seleccionada.
+ * -fx-base y -fx-background le dicen a JavaFX que todo el tema es oscuro, asi los controles
+ * (listas, scroll, pestanas) calculan solos colores de texto claros.
+ */
+
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 13px;
+    -fx-base: #3a3342;
+    -fx-background: #1f1b24;
+    -fx-control-inner-background: #15121a;
+    -fx-accent: #e08a3c;
+    -fx-focus-color: #e08a3c;
+    -fx-faint-focus-color: #e08a3c22;
+    -accent: #e08a3c;
+    -fx-background-color: radial-gradient(center 15% 0%, radius 120%, #2e2539, #17131c);
+}
+
+/* ---------- encabezado ---------- */
+
+.encabezado {
+    -fx-padding: 12 22 12 22;
+    -fx-background-color: linear-gradient(to right, #221c29, #2b2233);
+    -fx-border-color: transparent transparent #3b3246 transparent;
+}
+
+.titulo-app {
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, #f2c14e, #e08a3c);
+}
+
+.subtitulo-app {
+    -fx-text-fill: #a79fb3;
+}
+
+.progreso-texto {
+    -fx-text-fill: #f2ede4;
+    -fx-font-weight: bold;
+}
+
+.progress-bar > .track {
+    -fx-background-color: #15121a;
+    -fx-background-radius: 6;
+}
+
+.progress-bar > .bar {
+    -fx-background-color: linear-gradient(to right, #e08a3c, #f2c14e);
+    -fx-background-radius: 6;
+    -fx-background-insets: 0;
+}
+
+/* ---------- barra lateral y tarjetas de mision ---------- */
+
+.barra-lateral {
+    -fx-padding: 16 12 16 18;
+    -fx-pref-width: 275;
+}
+
+.seccion-titulo {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #8d8499;
+}
+
+.tarjeta {
+    -fx-background-color: #2a2530;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-width: 0 0 0 5;
+    -fx-padding: 12;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 10, 0, 0, 3);
+}
+
+.tarjeta:hover {
+    -fx-background-color: #332c3a;
+}
+
+.tarjeta-seleccionada {
+    -fx-background-color: #3d3346;
+    -fx-effect: dropshadow(gaussian, rgba(242, 193, 78, 0.35), 16, 0.1, 0, 0);
+}
+
+.tarjeta-numero {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.tarjeta-nombre {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f2ede4;
+}
+
+.tarjeta-algoritmo {
+    -fx-text-fill: #a79fb3;
+    -fx-font-size: 12px;
+}
+
+.pastilla {
+    -fx-background-radius: 20;
+    -fx-padding: 2 9 2 9;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.pastilla-pendiente {
+    -fx-background-color: #50465c;
+    -fx-text-fill: #d6cfe0;
+}
+
+.pastilla-resuelta {
+    -fx-background-color: #1f4d3a;
+    -fx-text-fill: #5dd39e;
+}
+
+/* ---------- banner de la mision ---------- */
+
+.banner {
+    -fx-background-color: linear-gradient(to right, #2a2530, #231e29);
+    -fx-background-radius: 14;
+    -fx-border-color: -accent;
+    -fx-border-width: 0 0 0 5;
+    -fx-border-radius: 14;
+    -fx-padding: 14 18 14 16;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 12, 0, 0, 4);
+}
+
+.mision-titulo {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f2ede4;
+}
+
+.mision-algoritmo {
+    -fx-background-color: -accent;
+    -fx-text-fill: #1f1b24;
+    -fx-background-radius: 20;
+    -fx-padding: 3 11 3 11;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+
+.mision-historia {
+    -fx-text-fill: #cfc7da;
+}
+
+.burbuja {
+    -fx-background-color: #f2ede4;
+    -fx-text-fill: #231e29;
+    -fx-background-radius: 14 14 14 2;
+    -fx-padding: 8 14 8 14;
+    -fx-font-weight: bold;
+}
+
+.burbuja-villano {
+    -fx-background-color: #3b2352;
+    -fx-text-fill: #e9d8ff;
+    -fx-border-color: #9b5de5;
+    -fx-border-radius: 14 14 14 2;
+}
+
+/* ---------- paneles de trabajo y dibujo ---------- */
+
+.panel {
+    -fx-background-color: #2a2530;
+    -fx-background-radius: 14;
+    -fx-padding: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 12, 0, 0, 4);
+}
+
+.panel-titulo {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #8d8499;
+}
+
+.text-area {
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-font-size: 13px;
+    -fx-background-color: #3b3246, #15121a;
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 10;
+    -fx-text-fill: #e8e2d6;
+    -fx-highlight-fill: -accent;
+    -fx-prompt-text-fill: #6b6377;
+}
+
+.text-area:focused {
+    -fx-background-color: -accent, #15121a;
+}
+
+.text-area .content {
+    -fx-background-color: #15121a;
+    -fx-background-radius: 10;
+}
+
+.salida {
+    -fx-text-fill: #9ff0c8;
+}
+
+.salida .content {
+    -fx-background-color: #0f0d13;
+}
+
+.boton {
+    -fx-background-color: #3b3246;
+    -fx-text-fill: #f2ede4;
+    -fx-background-radius: 10;
+    -fx-padding: 8 16 8 16;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.boton:hover {
+    -fx-background-color: #4a4056;
+}
+
+.boton-principal {
+    -fx-background-color: -accent;
+    -fx-text-fill: #1a161f;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.45), 8, 0, 0, 2);
+}
+
+.boton-principal:hover {
+    -fx-background-color: derive(-accent, 18%);
+}
+
+.boton-caso {
+    -fx-padding: 4 11 4 11;
+}
+
+.progress-indicator {
+    -fx-progress-color: -accent;
+}
+
+.respuesta {
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -accent;
+}
+
+.respuesta-villano {
+    -fx-text-fill: #c9a2ff;
+}
+
+.leyenda {
+    -fx-text-fill: #a79fb3;
+    -fx-font-size: 12px;
+}
+
+.avisos {
+    -fx-text-fill: #f2c14e;
+    -fx-font-size: 12px;
+}
+
+.aviso-omitido {
+    -fx-background-color: #231e29;
+    -fx-border-color: #f2c14e;
+    -fx-border-style: segments(8, 6);
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 22;
+    -fx-text-fill: #f2c14e;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color: transparent;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-background-color: #231e29;
+    -fx-background-radius: 8 8 0 0;
+    -fx-padding: 4 12 4 12;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab:selected {
+    -fx-background-color: #3d3346;
+}
+
+.tab .tab-label {
+    -fx-text-fill: #f2ede4;
+    -fx-font-weight: bold;
+}
+
+.tab-pane > .tab-content-area {
+    -fx-background-color: #1a161f;
+    -fx-background-radius: 0 10 10 10;
+}
+
+.scroll-pane,
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* La matriz de Tomas se muestra sobre "papel" claro: asi sus colores (gris y rojo) se leen bien */
+.papel {
+    -fx-background: #f2ede4;
+    -fx-background-color: #f2ede4;
+    -fx-background-radius: 10;
+    -fx-padding: 6;
+}
+
+.papel .scroll-pane > .viewport {
+    -fx-background-color: #f2ede4;
+}
+
+.barra-estado {
+    -fx-padding: 8 20 8 20;
+    -fx-background-color: #15121a;
+    -fx-border-color: #3b3246 transparent transparent transparent;
+}
+
+.estado-info {
+    -fx-text-fill: #cfc7da;
+}
+
+.estado-ok {
+    -fx-text-fill: #5dd39e;
+}
+
+.estado-aviso {
+    -fx-text-fill: #f2c14e;
+}
+
+.estado-error {
+    -fx-text-fill: #ff7b72;
+    -fx-font-weight: bold;
+}
+
+/* ---------- portada y final ---------- */
+
+.pantalla-historia,
+.pantalla-final {
+    -fx-background-color: #110e14;
+}
+
+.fondo-batalla {
+    -fx-background-image: url("img/batalla.png");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+}
+
+.velo {
+    -fx-background-color: linear-gradient(to bottom, rgba(17, 14, 20, 0.45), rgba(17, 14, 20, 0.93));
+}
+
+.expediente {
+    -fx-text-fill: #e4574c;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-border-color: #e4574c;
+    -fx-border-width: 2;
+    -fx-border-radius: 4;
+    -fx-padding: 3 10 3 10;
+    -fx-rotate: -3;
+}
+
+.historia-titulo {
+    -fx-font-size: 44px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, #f2c14e, #e08a3c);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.85), 12, 0, 0, 3);
+}
+
+.historia-texto {
+    -fx-font-size: 16px;
+    -fx-text-fill: #f2ede4;
+    -fx-line-spacing: 3;
+}
+
+.tarjeta-historia {
+    -fx-background-color: rgba(31, 27, 36, 0.85);
+    -fx-background-radius: 18;
+    -fx-border-color: rgba(224, 138, 60, 0.55);
+    -fx-border-radius: 18;
+    -fx-border-width: 1.5;
+    -fx-padding: 24 30 24 30;
+}
+
+.nombre-gato {
+    -fx-font-weight: bold;
+    -fx-text-fill: #f2ede4;
+}
+
+.rol-gato {
+    -fx-text-fill: #a79fb3;
+    -fx-font-size: 11px;
+}
+
+.vs {
+    -fx-font-size: 34px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e4574c;
+    -fx-effect: dropshadow(gaussian, #e4574c, 14, 0.3, 0, 0);
+}
+
+.boton-grande,
+.boton-grande-secundario {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 34 12 34;
+    -fx-background-radius: 30;
+    -fx-cursor: hand;
+}
+
+.boton-grande {
+    -fx-background-color: linear-gradient(to right, #f2c14e, #e08a3c);
+    -fx-text-fill: #1a161f;
+    -fx-effect: dropshadow(gaussian, rgba(224, 138, 60, 0.7), 18, 0.2, 0, 0);
+}
+
+.boton-grande:hover {
+    -fx-background-color: linear-gradient(to right, #ffd66b, #f39c4c);
+}
+
+.boton-grande-secundario {
+    -fx-background-color: #3b3246;
+    -fx-text-fill: #f2ede4;
+}
+
+.boton-grande-secundario:hover {
+    -fx-background-color: #4a4056;
+}
+
+.final-titulo {
+    -fx-font-size: 50px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, #5dd39e, #f2c14e);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.85), 14, 0, 0, 3);
+}
