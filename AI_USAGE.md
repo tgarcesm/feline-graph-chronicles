@@ -11,7 +11,7 @@ El uso de LLMs fue utilizado como apoyo para analizar requisitos, desarrollar, d
 | Herramienta | Parte del proyecto | Integrante |
 |---|---|---|
 | ChatGPT (OpenAI) | Análisis del enunciado y de la guía, implementación y revisión de BFS, DFS, Disjoint Set y Kruskal, integración de las Misiones 1 y 4, GridRenderer, tests JUnit, Maven, Git y revisión de requisitos. | Samuel |
-| PENDIENTE | Tomas debe indicar qué herramienta de IA utilizó y para qué partes. | Tomas |
+| Claude Code (Anthropic, Claude Sonnet 5) | Lectura del enunciado (PDF) y de la guia de equipo (Word), diseno e implementacion de Floyd-Warshall y Bellman-Ford en version de maximizacion, Mission3Churun (parser, precedencia de salida, matriz, cross-check), MatrixRenderer, Mission3Test, flujo de Git (rama, commits, Pull Request), preparacion de la defensa individual y revision de los Pull Requests de Samuel. | Tomas |
 | PENDIENTE | Sebastian debe indicar qué herramienta de IA utilizó y para qué partes. | Sebastian |
 
 ### Uso realizado por Samuel
@@ -38,6 +38,33 @@ El flujo de trabajo utilizado fue:
 4. Compilar y ejecutar tests.
 5. Comparar los resultados con los samples oficiales.
 6. Corregir cualquier diferencia antes de integrar el código.
+
+### Uso realizado por Tomas
+
+Claude Code se uso como asistente de desarrollo dentro del propio entorno (terminal + editor), no como un chat aparte. Las actividades principales fueron:
+
+- Extraccion y lectura completa del enunciado (`parcial.pdf`, 17 paginas) y de la guia de trabajo del equipo (`Guia_de_Trabajo_Feline_Graph_Chronicles.docx`), incluyendo la tabla de reparto de trabajo y el checklist final.
+- Revision del estado real del repositorio (contratos ya subidos por Sebastian, commits existentes) antes de escribir una sola linea, para no inventar interfaces que ya existian.
+- Implementacion de `FloydWarshall.java` (maximizacion todos-contra-todos con la pasada de marcado de ciclos no acotados).
+- Implementacion de `BellmanFord.java` (maximizacion desde un origen, deteccion y propagacion de ciclos de ganancia positiva, reconstruccion de la ruta y del ciclo responsable).
+- Implementacion de `Mission3Churun.java` (parser, precedencia de los tres mensajes, matriz N x N, cross-check entre los dos algoritmos).
+- Implementacion de `MatrixRenderer.java`.
+- Creacion de `Mission3Test.java` (26 pruebas cubriendo las tres ramas de la precedencia).
+- Diagnostico de un entorno sin JDK 17 ni Maven en el PATH, y verificacion de que `mvn -q clean verify` pasa completo (la parte de Tomas y la de sus companeros).
+- Creacion de la rama `feat/tomas-m3-floyd-bellman-churun`, commits separados por responsabilidad, push y preparacion del Pull Request #1.
+- Explicacion linea por linea del propio codigo para preparar la defensa individual.
+- Revision de las ramas/PRs de Samuel (`feat/samuel-m1`, `feat/samuel-m4`, `feat/samuel-grid-renderer`) comparando el codigo real contra el enunciado y la guia, no solo confiando en la descripcion del PR.
+- Consolidacion de este archivo `AI_USAGE.md` con el aporte de cada integrante.
+
+El flujo de trabajo fue el mismo que el de Samuel, con un paso extra de lectura de documentos y verificacion matematica manual del algoritmo antes de escribir los tests:
+
+1. Leer el enunciado y la guia completos antes de tocar codigo.
+2. Ubicar exactamente que archivos son responsabilidad de Tomas segun la tabla de propiedad (seccion 5.4 de la guia).
+3. Trazar a mano el algoritmo sobre los samples del enunciado antes de escribirlo (por ejemplo, verificar manualmente que el caso 2 del sample de la Mision 3 detecta el ciclo 1<->2 con ganancia neta +20).
+4. Implementar.
+5. Compilar y correr los tests con Maven.
+6. Comparar la salida contra los samples oficiales caracter por caracter.
+7. Confirmar antes de integrar o hacer commit.
 
 ---
 
@@ -69,7 +96,49 @@ El análisis permitió identificar aspectos importantes como:
 
 Se utilizó como plan inicial, pero posteriormente cada punto importante se volvió a verificar contra el PDF original del profesor.
 
+### Prompts decisivos de Tomas
 
+#### 1. Punto de partida: leer ambos documentos y ubicar la propia parte
+
+**Prompt:**
+
+> "Debo hacer mi parte del parcial de lenguajes y compiladores. Te adjunto dos documentos, uno en PDF que envia el profe, y otro en Word que es como un documento maestro para hacer el trabajo, en el repo actualmente esta la parte de Higuita, revisa bien, estructura, etc, y empezamos con mi parte, debo hacerla en otra rama para luego unirla al main (revisa lo que dice el documento acerca de git)."
+
+**Por qué se necesitó:**
+
+Sin leer los dos documentos completos (no solo hojearlos) era imposible saber que la Mision 3 era la parte de Tomas, cuales archivos exactos le correspondian (tabla 5.4 de la guia), ni que el flujo de Git esperado era rama por tarea + Pull Request, nunca commit directo a `main`.
+
+**Qué se hizo con la respuesta:**
+
+Se extrajo el texto completo del PDF y del Word (el PDF requirio instalar `pdfplumber`, el Word `python-docx`), se identifico la Mision 3 como la responsabilidad de Tomas, se leyeron los contratos ya existentes en el repositorio (`Tokenizer`, `Mission`, `CaseResult`, `MissionResult`, `GraphDrawing`, `MatrixDrawing`) para no reinventarlos, y se creo la rama `feat/tomas-m3-floyd-bellman-churun` antes de escribir codigo.
+
+#### 2. Preparación de la defensa: entender a fondo, no solo tener el código funcionando
+
+**Prompt:**
+
+> "Necesito saber que hicimos, explicame a profundidad mi parte, lo que hicimos, que hace y ademas de que trata el parcial en general."
+
+**Por qué se necesitó:**
+
+El enunciado es explicito en que la nota individual depende de poder explicar el codigo en la defensa oral (factor de 0.0 a 1.0), no solo de que el codigo funcione. Hacia falta una explicacion que conectara las reglas generales del enunciado con decisiones concretas de implementacion (por que dos algoritmos, por que los centinelas, por que la pasada de marcado va aparte).
+
+**Qué se hizo con la respuesta:**
+
+Se genero una explicacion estructurada en niveles (el parcial en general, la arquitectura del repo, la Mision 3 en profundidad archivo por archivo, preguntas probables de defensa con respuesta corta), en vez de simplemente reafirmar que el codigo estaba bien.
+
+#### 3. Verificación cruzada del trabajo de un compañero
+
+**Prompt:**
+
+> "¿Tienes acceso al repositorio y a los pull requests que hay? Debemos verificar que lo que hizo Samuel esta bien, esta en 3 pull requests."
+
+**Por qué se necesitó:**
+
+El enunciado exige que cada integrante pueda explicar y modificar cualquier parte del proyecto, no solo la propia, y la guia advierte que "aprobar sin correr nada no sirve de nada". Como no habia `gh` (GitHub CLI) instalado ni sesion de navegador autenticada, no se podia usar la interfaz de Pull Requests directamente.
+
+**Qué se hizo con la respuesta:**
+
+Se listaron las ramas remotas de Samuel con `git fetch` / `git branch -r`, se comparo cada una contra `main` con `git diff --stat`, y se leyo el codigo real (`Bfs.java`, `Dfs.java`, `DisjointSet.java`, `Kruskal.java`, `Mission1Minefield.java`, `Mission4Network.java`) verificando puntos especificos del enunciado: indexacion plana `row * cols + col`, orden de vecinos del DFS (arriba, abajo, izquierda, derecha), compresion de caminos y union por tamano en el union-find, y la conversion de nodos 1..N a 0..N-1 que solo aplica en la Mision 4.
 
 ---
 
@@ -169,6 +238,62 @@ Cuando el repositorio estuvo disponible:
 
 Esto evitó mantener dos arquitecturas incompatibles.
 
+### Casos detectados por Tomas
+
+#### 4. Error de codificación al extraer el texto del PDF del enunciado
+
+**Problema:**
+
+El primer intento de extraccion de texto con `pdfplumber` imprimia cada pagina directamente a la consola con `print()`. La pagina 3 del enunciado contiene el simbolo "≤" (en "1 ≤ R ≤ 1000"), y la consola de Windows usa por defecto la pagina de codigos `cp1252`, que no puede representar ese caracter.
+
+**Cómo se detectó:**
+
+El script termino con `UnicodeEncodeError: 'charmap' codec can't encode character '≤'` y el archivo de salida quedo truncado a solo 2 paginas de las 17 que tiene el PDF.
+
+**Cómo se corrigió:**
+
+Se reescribio el script para escribir directamente a un archivo abierto con `encoding='utf-8'` en vez de imprimir por consola, evitando asi la recodificacion a `cp1252`. Con eso se extrajeron las 17 paginas completas.
+
+**Aprendizaje obtenido:**
+
+En Windows, la ruta "imprimir a consola" y la ruta "escribir a archivo" no comparten la misma codificacion por defecto; para texto con tildes o simbolos matematicos hay que fijar la codificacion explicitamente, no asumirla.
+
+#### 5. Faltaba JDK 17 y Maven no estaba en el PATH
+
+**Problema:**
+
+Este equipo solo tenia instalado Java 8 (`java -version` devolvia `1.8.0_501`) y ningun `mvn` accesible desde PowerShell ni Bash, a pesar de que el `pom.xml` exige `maven.compiler.release=17`.
+
+**Cómo se detectó:**
+
+`mvn -q compile` devolvio `El termino 'mvn' no se reconoce...` tanto en PowerShell como en Bash.
+
+**Cómo se corrigió:**
+
+Se busco una instalacion de Maven empaquetada con IntelliJ (`...plugins\maven\lib\maven3\bin\mvn`) y un JDK mas nuevo bajo `~/.jdks` (`openjdk-25.0.1`, instalado por el propio IntelliJ). Se exporto `JAVA_HOME` apuntando a ese JDK y se ejecuto Maven desde su ruta completa. Como `maven.compiler.release=17` lo sigue respetando un compilador mas nuevo, el build compilo y paso los tests sin modificar el `pom.xml`.
+
+**Aprendizaje obtenido:**
+
+"JDK 17 o superior" (como pide el enunciado) no significa tener instalada exactamente la version 17; un JDK mas nuevo con `--release 17` produce bytecode compatible, y conviene verificarlo con una compilacion real antes de asumir que hace falta instalar algo.
+
+#### 6. Intento fallido de automatizar la creación del Pull Request
+
+**Problema:**
+
+Tras hacer `git push`, se intento abrir automaticamente la pagina de creacion del Pull Request en GitHub usando primero un navegador integrado y despues la extension "Claude in Chrome".
+
+**Cómo se detectó:**
+
+El navegador integrado no tenia sesion iniciada en GitHub (mostro la pantalla de login), y la extension de Chrome no respondio al intentar listar pestañas ("Claude in Chrome no esta conectado").
+
+**Cómo se corrigió:**
+
+En vez de intentar iniciar sesion (ademas de que escribir credenciales por el usuario esta explicitamente prohibido), se le entrego al usuario el enlace directo que Git ya habia generado al hacer push, junto con un titulo y una descripcion de PR ya redactados siguiendo la plantilla del Anexo C de la guia, para que el mismo lo creara con un clic.
+
+**Aprendizaje obtenido:**
+
+Cuando una accion requiere una sesion autenticada del usuario, el camino correcto no es intentar rodear la autenticacion, sino preparar todo el contenido de antemano para que el paso humano sea de un solo clic.
+
 ---
 
 ## Qué aprendió cada integrante
@@ -194,7 +319,16 @@ Durante este proyecto aprendí y reforcé varios conceptos:
 
 ### Tomas
 
-**PENDIENTE:** Tomas debe documentar qué aprendió durante el proyecto y que no sabía previamente.
+Durante este proyecto aprendí y reforcé varios conceptos:
+
+- Por qué Floyd-Warshall y Bellman-Ford, adaptados a maximización, invierten cada comparación (`>` en vez de `<`) y cambian el centinela de "sin ruta" de `+∞` a `Long.MIN_VALUE`.
+- Por qué un ciclo con ganancia neta positiva alcanzable desde el origen y que puede llegar al destino hace que la respuesta sea "infinita", y por qué eso no es lo mismo que decir que todo el grafo es no acotado.
+- Por qué la pasada de marcado de "no acotado" de Floyd-Warshall se calcula sobre una copia booleana antes de escribir el centinela `UNBOUNDED` en la matriz real, y qué pasaría si se escribiera directamente mientras se recorre.
+- La técnica estándar para extraer un ciclo desde el árbol de padres de Bellman-Ford: caminar N pasos hacia atrás desde un nodo que todavía mejora garantiza caer dentro del ciclo.
+- Por qué el enunciado pide correr los dos algoritmos en cada caso y compararlos entre sí (cross-check), y cómo exponer esa comparación como una función pura y estática para poder probarla de forma aislada, forzando una discrepancia a mano.
+- Que revisar el Pull Request de un compañero en serio implica leer el código real y compararlo contra el enunciado línea por línea, no solo leer la descripción del PR ni confiar en que "ya pasó los tests".
+- Que un JDK más nuevo que el mínimo exigido no es un problema si el `pom.xml` fija `maven.compiler.release`, y cómo verificar eso con una compilación real en vez de asumirlo.
+- Que la codificación de caracteres en Windows depende de si se imprime a consola o se escribe a un archivo, y que hay que fijarla explícitamente al trabajar con texto que tiene tildes o símbolos matemáticos.
 
 ### Sebastian
 
@@ -215,6 +349,17 @@ Para la parte desarrollada por Samuel se realizaron verificaciones concretas ant
 - Se comprobó el uso de `long` en costos acumulados.
 - Se ejecutaron los tests mediante Maven.
 - Las ramas de Samuel se integraron localmente y se volvió a ejecutar la batería de pruebas antes de crear los Pull Requests.
+
+### Verificación realizada por Tomas
+
+Para la parte desarrollada por Tomas (Misión 3) se realizaron las siguientes verificaciones antes de integrar:
+
+- El sample oficial produjo exactamente `Case #1: 110`, `Case #2: Infinite churun!`, `Case #3: -65`.
+- Se probó cada rama de la precedencia por separado: inalcanzable, ciclo positivo que sí llega al destino, ciclo positivo que NO llega al destino (el caso que la guía marca como "el que más se rompe"), y un máximo negativo.
+- Se verificó a mano, sobre el caso 2 del sample, que el ciclo detectado por Bellman-Ford (nodos 1 y 2, ganancia neta +20 por vuelta) coincide con el nodo `k` que Floyd-Warshall usa para marcar `(0,3)` como no acotado.
+- Se probó que el aviso de discrepancia entre Floyd-Warshall y Bellman-Ford se dispara cuando se le pasan categorías o valores distintos a mano, y que no se dispara con el sample real (los dos algoritmos coinciden).
+- Se comprobó que la matriz N x N siempre está presente (nunca se omite, porque N nunca supera 100) y que el dibujo del grafo sí se omite por encima de 60 nodos, con un caso en 60 (se dibuja) y otro en 61 (no se dibuja).
+- Se ejecutó `mvn -q clean verify` sobre el proyecto completo (no solo la Misión 3) para confirmar que no se rompió nada de lo ya integrado por Sebastian y Samuel.
 
 El uso de IA se tomó como una herramienta de apoyo para acelerar el análisis, generar propuestas y detectar problemas. La salida generada se consideró una propuesta que debía verificarse antes de formar parte del proyecto.
 
