@@ -116,7 +116,7 @@ Se extrajo el texto completo del PDF y del Word (el PDF requirio instalar `pdfpl
 
 **Prompt:**
 
-> "Necesito saber que hicimos, explicame a profundidad mi parte, lo que hicimos, que hace y ademas de que trata el parcial en general."
+> "Ahora, ya con mi parte lista vamos a profundizar en el proyecto en general para tener claridad completa."
 
 **Por qué se necesitó:**
 
